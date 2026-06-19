@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "psychopy-mcp"
+version = "0.1.0"
+description = "Drive PsychoPy from Claude Code / Codex via the Model Context Protocol — literature-grounded experiment paradigms, run/compile/introspect, and a live interactive window."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "psychlee1", email = "psychlee1@gmail.com" }]
+keywords = ["psychopy", "mcp", "psychology", "experiments", "claude", "cognitive-science"]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "mcp>=1.2.0",
+    "pandas>=2.0",
+    "psychopy>=2024.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/hackerunner/psychopy-mcp"
+Issues = "https://github.com/hackerunner/psychopy-mcp/issues"
+
+[project.scripts]
+psychopy-mcp = "psychopy_mcp.cli:main"
+
+[tool.setuptools]
+packages = [
+    "psychopy_mcp",
+    "psychopy_mcp.paradigms",
+    "psychopy_mcp.runner",
+    "psychopy_mcp.frontend",
+]
+
+[tool.setuptools.package-data]
+"psychopy_mcp" = ["templates/*"]

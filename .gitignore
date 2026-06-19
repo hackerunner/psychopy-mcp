@@ -1,0 +1,18 @@
+# venv & build
+.venv/
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.pyc
+
+# runtime data
+workspace/
+setup.log
+
+# keep the custom-paradigms folder but not its contents
+custom_paradigms/*.json
+
+# OS
+Thumbs.db
+.DS_Store

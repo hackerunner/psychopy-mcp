@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "psychopy": {
+      "command": "C:\\Users\\A\\psychopy-mcp\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "psychopy_mcp.server"],
+      "env": { "PYTHONPATH": "C:\\Users\\A\\psychopy-mcp" }
+    }
+  }
+}
