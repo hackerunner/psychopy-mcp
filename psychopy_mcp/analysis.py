@@ -25,6 +25,7 @@ ANALYSIS = {
     "taskswitch": "switchcost",
     "nback": "nback",
     "ant": "ant",
+    "deception": "deception",
 }
 # condition naming per conflict paradigm: (baseline, interference)
 _CONFLICT_PAIR = {"congruent": "incongruent"}
@@ -109,6 +110,10 @@ def analyze(csv_path: str, paradigm: Optional[str] = None,
         if "switch" in rt and "repeat" in rt:
             out["effect_ms"] = round((rt["switch"] - rt["repeat"]) * 1000, 1)
             out["effect_label"] = "switch cost (switch - repeat), ms"
+    elif kind == "deception":
+        if "lie" in rt and "truth" in rt:
+            out["effect_ms"] = round((rt["lie"] - rt["truth"]) * 1000, 1)
+            out["effect_label"] = "lie effect (lie - truth), ms"
     elif kind == "gonogo":
         out.update(_gonogo(df))
     elif kind == "slope_setsize":

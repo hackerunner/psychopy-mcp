@@ -18,7 +18,7 @@ from pathlib import Path
 REGISTRY = [
     "stroop", "flanker", "simon", "gonogo", "posner", "stopsignal", "ant",
     "nback", "sternberg", "visualsearch", "taskswitch", "lexdecision",
-    "mentalrotation", "dotprobe",
+    "mentalrotation", "dotprobe", "deception",
 ]
 
 from psychopy_mcp.paths import CUSTOM_DIR, PROJECT_ROOT  # noqa: E402
