@@ -31,53 +31,62 @@ SPEC = {
     ],
     "conditions": ["truth", "lie"],
     "condition_balance": "equal; each question answered both truthfully and deceptively",
-    "task": ("Answer each yes/no question. GREEN question = tell the TRUTH. "
-             "RED question = LIE (give the wrong answer). yes = J, no = F."),
-    "instructions": (
-        "DECEPTION TASK\n"
+    "task": ("根据问题颜色作答：绿色说真话、红色说谎（答相反）。J=是，F=否。"),
+    "instructions": [
+        # 第 1 页：欢迎 + 总览
+        "说谎实验\n"
         "\n"
-        "You will see yes / no questions, one at a time.\n"
-        "The COLOUR of the question tells you how to answer:\n"
+        "欢迎参加本实验，感谢你的参与。\n"
         "\n"
-        "    GREEN question   ->   tell the TRUTH\n"
-        "    RED question     ->   LIE (give the WRONG answer)\n"
+        "实验中，屏幕中央会逐个出现「是 / 否」问题。\n"
+        "你需要根据问题的颜色，决定如何回答。\n"
         "\n"
-        "Respond with the keys:    J = yes      F = no\n"
+        "请坐姿舒适，将左右手食指分别放在 F 键和 J 键上。",
+        # 第 2 页：规则 + 按键 + 例子
+        "答题规则\n"
         "\n"
-        "Examples:\n"
-        "    GREEN  'Is the sky blue?'   ->  truth ->  press J (yes)\n"
-        "    RED    'Is the sky blue?'   ->  lie   ->  press F (no)\n"
-        "    RED    'Do cats bark?'      ->  lie   ->  press J (yes)\n"
+        "    绿色问题   →   说真话（按正确答案）\n"
+        "    红色问题   →   说谎　（按相反的错误答案）\n"
         "\n"
-        "First there is a '+' to fixate on, then the question appears.\n"
-        "Answer as quickly and accurately as you can.\n"
-        "(Press ESC at any time to quit.)"
-    ),
+        "按键：    J 键 = 是　　　　F 键 = 否\n"
+        "\n"
+        "例子：\n"
+        "    绿色「天空是蓝色的吗？」 → 说真话 → 按 J（是）\n"
+        "    红色「天空是蓝色的吗？」 → 说谎　 → 按 F（否）\n"
+        "    红色「猫会汪汪叫吗？」　 → 说谎　 → 按 J（是）\n"
+        "\n"
+        "请尽量又快又准地作答。每题先出现「+」，再出现问题。\n"
+        "中途想退出，请按 ESC 键。",
+    ],
     "surface": {
         "units": "height", "background": "black",
-        "stim_pos": [0.0, 0.0], "stim_height": 0.06,
+        "stim_pos": [0.0, 0.0], "stim_height": 0.08,
         "truth_color": "lime", "lie_color": "red",
         "fixation_char": "+", "fixation_height": 0.08,
+        "font": "Microsoft YaHei",            # CJK font for the questions
+        "instruction_font": "Microsoft YaHei",  # CJK font for the instructions
     },
+    "begin_prompt": "按【空格键】开始实验",
+    "continue_prompt": "按【空格键】继续",
     "timing": {"fixation_sec": 0.5, "max_response_sec": 5.0, "iti_sec": 1.0},
     "responses": {
         "mapping": {"yes": "j", "no": "f"}, "quit_key": "escape",
         "note": "Colour of the question text is the lie/truth cue.",
     },
-    # yes/no questions with objective answers (6 'yes' + 6 'no')
+    # 有客观答案的「是/否」问题（6 个"是" + 6 个"否"）
     "questions": [
-        ("Is the sky blue?", "yes"),
-        ("Do fish live in water?", "yes"),
-        ("Is grass green?", "yes"),
-        ("Is ice frozen water?", "yes"),
-        ("Is China in Asia?", "yes"),
-        ("Can birds fly?", "yes"),
-        ("Is fire cold?", "no"),
-        ("Do cats bark?", "no"),
-        ("Is the sun a planet?", "no"),
-        ("Can humans breathe underwater?", "no"),
-        ("Is two plus two five?", "no"),
-        ("Do cars run on water?", "no"),
+        ("天空是蓝色的吗？", "yes"),
+        ("鱼生活在水里吗？", "yes"),
+        ("草是绿色的吗？", "yes"),
+        ("冰是冻住的水吗？", "yes"),
+        ("中国在亚洲吗？", "yes"),
+        ("鸟会飞吗？", "yes"),
+        ("火是冷的吗？", "no"),
+        ("猫会汪汪叫吗？", "no"),
+        ("太阳是一颗行星吗？", "no"),
+        ("人能在水下呼吸吗？", "no"),
+        ("二加二等于五吗？", "no"),
+        ("汽车靠水行驶吗？", "no"),
     ],
     "dv": ["RT (correct trials)", "accuracy",
            "lie effect = RT(lie) - RT(truth)"],
@@ -98,7 +107,7 @@ def build_trials(reps: int = 3, seed: int = 0) -> list[dict]:
                 color = S["truth_color"] if cue == "truth" else S["lie_color"]
                 answer = true_ans if cue == "truth" else opposite[true_ans]
                 stim = text(question, color=color, pos=S["stim_pos"],
-                            height=S["stim_height"])
+                            height=S["stim_height"], font=S.get("font", "Arial"))
                 trials.append({
                     "condition": cue,
                     "phases": [fixation_phase(SPEC),

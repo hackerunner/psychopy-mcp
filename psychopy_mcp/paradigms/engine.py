@@ -108,8 +108,9 @@ def run(spec: dict, trials: list[dict], exp_name: str,
     exp.addLoop(handler)
 
     # ── instructions ───────────────────────────────────────────
-    # A paradigm may supply a full `instructions` screen in its spec; otherwise
-    # one is built from the task description and the response-key mapping.
+    # `instructions` may be a single string OR a list of pages (shown in turn,
+    # advanced with SPACE). Font and the continue/begin prompts come from the
+    # spec, so paradigms can localise (e.g. Chinese) without engine changes.
     if show_instructions:
         body = spec.get("instructions")
         if not body:
@@ -117,12 +118,18 @@ def run(spec: dict, trials: list[dict], exp_name: str,
             mapping = spec.get("responses", {}).get("mapping", {})
             keys_txt = "    ".join(f"{k} = {v}" for k, v in mapping.items())
             body = f"{msg}\n\n{keys_txt}"
-        visual.TextStim(win, height=0.04, color="white", wrapWidth=1.6,
-                        alignText="left", anchorHoriz="center",
-                        text=body.rstrip() + "\n\n\nPress SPACE to begin.").draw()
-        win.flip()
-        if event.waitKeys(keyList=["space", quit_key]) == [quit_key]:
-            win.close(); core.quit()
+        pages = body if isinstance(body, (list, tuple)) else [body]
+        ifont = S.get("instruction_font", "Arial")
+        begin_p = spec.get("begin_prompt", "Press SPACE to begin")
+        cont_p = spec.get("continue_prompt", "Press SPACE to continue")
+        for i, page in enumerate(pages):
+            footer = begin_p if i == len(pages) - 1 else cont_p
+            visual.TextStim(win, height=0.04, color="white", wrapWidth=1.4,
+                            alignText="center", anchorHoriz="center", font=ifont,
+                            text=str(page).rstrip() + "\n\n\n" + footer).draw()
+            win.flip()
+            if event.waitKeys(keyList=["space", quit_key]) == [quit_key]:
+                win.close(); core.quit()
 
     clock = core.Clock()
     aborted = False
