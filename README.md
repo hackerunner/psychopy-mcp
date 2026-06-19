@@ -162,6 +162,18 @@ export_for_spss("data/xxx.csv", aggregate=True)  # 2. 导出 SPSS 可读 CSV
    → 让 SPSS-MCP 导入该 CSV，对 rt_ms 按 condition 跑重复测量 ANOVA   # 3. 出统计
 ```
 
+## 实验文件与数据在哪里
+
+| 内容 | 位置 |
+|------|------|
+| 生成的实验脚本 | `workspace/<名字>.py`（如 `workspace/lie_experiment.py`）|
+| **运行产生的数据** | `workspace/data/`：`*.csv`(每试次一行)、`*.psydat`、`*_1.csv`(宽格式)、`*_analysis.png`(分析图) |
+| 自定义范式 | `custom_paradigms/<名字>.json` |
+| 网页导出 | `workspace/<名字>/`（`.psyexp` + `.js` + `conditions.csv`）|
+
+> `workspace/` 和数据**默认不纳入 git**（见 `.gitignore`）——它们是你本机的实验产物。
+> 想换存放根目录，设环境变量 `PSYCHOPY_MCP_HOME` 即可。
+
 ## 说明 / 限制
 
 - **不是 headless**：PsychoPy 基于 GUI，Windows 上运行实验会真实开窗。在带屏幕（或虚拟显示）的机器上跑。
