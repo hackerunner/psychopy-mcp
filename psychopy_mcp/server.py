@@ -482,6 +482,32 @@ def analyze_data(path: str, paradigm: str = "", plot: bool = True) -> dict:
     return analysis.analyze(str(p), paradigm=paradigm or None, plot=plot)
 
 
+@mcp.tool()
+def export_web(key: str, name: str = "") -> dict:
+    """Export a paradigm to a Builder .psyexp + PsychoJS .js for ONLINE studies.
+
+    Only Builder experiments transpile to JavaScript and run online on Pavlovia;
+    this builds one (instructions + fixation + stimulus + keyboard, looped over a
+    generated conditions CSV) and compiles it to .js. Upload the output folder to
+    Pavlovia (or sync from the PsychoPy Builder) to run web subjects.
+
+    Currently supports single-text-stimulus choice paradigms (stroop, flanker,
+    lexdecision, and text-based custom paradigms); shape/multi-phase paradigms
+    return a clear message and stay desktop-only.
+
+    Args:
+        key: paradigm key (see list_paradigms).
+        name: output name (defaults to web_<key>); files go to workspace/<name>/.
+    """
+    from psychopy_mcp import web
+    safe = "".join(c for c in (name or f"web_{key}") if c.isalnum() or c in "-_").strip("-_") or f"web_{key}"
+    out_dir = WORKSPACE / safe
+    try:
+        return web.export(key, safe, str(out_dir))
+    except ValueError as e:
+        return {"error": str(e)}
+
+
 # ───────────────────────── builder (.psyexp) ─────────────────────────
 
 
