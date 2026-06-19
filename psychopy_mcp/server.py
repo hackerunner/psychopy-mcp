@@ -462,6 +462,26 @@ def read_data(path: str, max_rows: int = 50) -> dict:
     return {"kind": "text", "preview": text[:8000]}
 
 
+@mcp.tool()
+def analyze_data(path: str, paradigm: str = "", plot: bool = True) -> dict:
+    """Compute a paradigm's canonical effect from its data CSV (+ optional plot).
+
+    Returns mean RT and accuracy per condition plus the paradigm-specific
+    dependent variable: Stroop/flanker/Simon congruency effect, Posner validity
+    effect, switch cost, search/Sternberg slope (ms/item), mental-rotation slope
+    (ms/deg), N-back d-prime, ANT network scores, or Go/No-Go commission rate.
+    Falls back to a generic per-condition summary for custom paradigms.
+
+    Args:
+        path: data CSV (relative resolves under workspace).
+        paradigm: paradigm key (e.g. "stroop"); inferred from the filename if omitted.
+        plot: also save a PNG plot next to the data file.
+    """
+    from psychopy_mcp import analysis
+    p = _resolve(path)
+    return analysis.analyze(str(p), paradigm=paradigm or None, plot=plot)
+
+
 # ───────────────────────── builder (.psyexp) ─────────────────────────
 
 
