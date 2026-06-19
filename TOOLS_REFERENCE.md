@@ -1,6 +1,6 @@
 # Tools Reference
 
-19 MCP tools, grouped. Relative paths resolve under `workspace/`.
+22 MCP tools, grouped. Relative paths resolve under `workspace/`.
 
 ## Introspection
 | Tool | Args | Returns |
@@ -34,6 +34,13 @@ sternberg, visualsearch, taskswitch, lexdecision, mentalrotation, dotprobe`.
 | `list_data` | `folder?` | csv/tsv/log/psydat/xlsx files |
 | `read_data` | `path, max_rows?` | parsed table / psydat / log preview |
 
+## Analysis & integration
+| Tool | Args | Returns |
+|------|------|---------|
+| `analyze_data` | `path, paradigm?, plot?` | canonical effect + per-condition RT/accuracy + PNG plot |
+| `export_for_spss` | `path, aggregate?` | SPSS-ready CSV (tidy per-trial, or per-condition means) |
+| `export_web` | `key, name?` | Builder `.psyexp` + PsychoJS `.js` + conditions CSV for Pavlovia |
+
 ## Builder (.psyexp)
 | Tool | Args | Returns |
 |------|------|---------|
@@ -49,6 +56,8 @@ sternberg, visualsearch, taskswitch, lexdecision, mentalrotation, dotprobe`.
 | `live_stop` | – | closes the live window |
 
 ## Typical chains
-- **Batch study:** `env_info` → `scaffold_paradigm` → `run_experiment` → `read_data`
-- **Custom:** `create_custom_paradigm` → `scaffold_paradigm` → `run_experiment`
+- **Batch study:** `env_info` → `scaffold_paradigm` → `run_experiment` → `read_data` → `analyze_data`
+- **Custom:** `create_custom_paradigm` → `scaffold_paradigm` → `run_experiment` → `analyze_data`
+- **Online study:** `export_web` → upload folder to Pavlovia
+- **Stats handoff:** `run_experiment` → `export_for_spss` → (SPSS-MCP imports & models)
 - **Pilot a stimulus:** `live_start` → `live_cmd` … → `live_stop`

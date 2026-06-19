@@ -508,6 +508,24 @@ def export_web(key: str, name: str = "") -> dict:
         return {"error": str(e)}
 
 
+@mcp.tool()
+def export_for_spss(path: str, aggregate: bool = False) -> dict:
+    """Write an analysis-ready CSV for the SPSS-MCP server to import.
+
+    Bridges this server with SPSS-MCP: PsychoPy collects data here, this emits a
+    clean CSV, then (in a session that also has SPSS-MCP configured) SPSS imports
+    it and runs the stats — design → run → analyse in one conversation.
+
+    Args:
+        path: paradigm data CSV (relative resolves under workspace).
+        aggregate: if true, write per participant x condition means (long format
+                   for repeated-measures ANOVA); else one tidy row per trial.
+    """
+    from psychopy_mcp import analysis
+    p = _resolve(path)
+    return analysis.to_spss(str(p), aggregate=aggregate)
+
+
 # ───────────────────────── builder (.psyexp) ─────────────────────────
 
 

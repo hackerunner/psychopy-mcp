@@ -128,6 +128,55 @@ def analyze(csv_path: str, paradigm: Optional[str] = None,
     return _native(out)
 
 
+def to_spss(csv_path: str, aggregate: bool = False,
+            out: Optional[str] = None) -> dict:
+    """Write an analysis-ready CSV for SPSS (import via the SPSS-MCP server).
+
+    tidy (default): one row per valid trial with participant, condition, rt_ms,
+    correct — ready for SPSS to aggregate/model.
+    aggregate=True: per participant x condition means (mean_rt_ms on correct
+    trials + accuracy), the long format for a repeated-measures ANOVA.
+    """
+    import pandas as pd
+    p = Path(csv_path)
+    if not p.exists():
+        return {"error": f"not found: {p}"}
+    df = pd.read_csv(p)
+    if "condition" not in df.columns:
+        return {"error": "no 'condition' column; not a paradigm data file"}
+
+    part = "participant" if "participant" in df.columns else None
+    df = df.copy()
+    if part is None:
+        df["participant"] = p.stem.split("_")[0]
+    df["rt_ms"] = _num(df["rt"]) * 1000
+    if "correct" in df.columns:
+        df["correct"] = _num(df["correct"])
+    else:
+        df["correct"] = pd.NA
+
+    keep = ["participant", "condition", "rt_ms", "correct"]
+    tidy = df[[c for c in keep if c in df.columns]].dropna(subset=["condition"])
+
+    if aggregate:
+        corr = tidy[tidy["correct"] == 1] if "correct" in tidy else tidy
+        rt = corr.dropna(subset=["rt_ms"]).groupby(["participant", "condition"])["rt_ms"].mean()
+        acc = tidy.groupby(["participant", "condition"])["correct"].mean()
+        result = rt.round(1).reset_index().rename(columns={"rt_ms": "mean_rt_ms"})
+        result["accuracy"] = acc.round(4).reset_index()["correct"]
+        suffix = "_spss_agg.csv"
+    else:
+        result = tidy.round({"rt_ms": 1})
+        suffix = "_spss.csv"
+
+    dest = Path(out) if out else p.with_name(p.stem + suffix)
+    result.to_csv(dest, index=False)
+    return {"path": str(dest), "rows": int(len(result)),
+            "columns": list(result.columns), "aggregate": aggregate,
+            "next": f"In a session with SPSS-MCP configured: import '{dest.name}' "
+                    f"then run a t-test/ANOVA on rt_ms by condition."}
+
+
 def _infer(p: Path) -> Optional[str]:
     name = p.stem.lower()
     for key in ANALYSIS:
