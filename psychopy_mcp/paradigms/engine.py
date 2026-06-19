@@ -74,7 +74,7 @@ def _make_stim(win, visual, d: dict):
 
 
 def run(spec: dict, trials: list[dict], exp_name: str,
-        info: Optional[dict] = None, fullscr: bool = False,
+        info: Optional[dict] = None, fullscr: bool = True,
         data_dir: str = "data", show_instructions: bool = True) -> str:
     """Run a paradigm and return the path to the saved CSV.
 
@@ -83,7 +83,7 @@ def run(spec: dict, trials: list[dict], exp_name: str,
         trials: list of trial dicts (see module docstring).
         exp_name: name used for the data filename and ExperimentHandler.
         info: extra experiment info to store (e.g. participant); shown as columns.
-        fullscr: open the window fullscreen.
+        fullscr: open the window fullscreen (default True, as in real studies).
         data_dir: folder (created if needed) for the CSV/psydat output.
     """
     from psychopy import visual, core, event, data, gui
@@ -108,12 +108,18 @@ def run(spec: dict, trials: list[dict], exp_name: str,
     exp.addLoop(handler)
 
     # ── instructions ───────────────────────────────────────────
+    # A paradigm may supply a full `instructions` screen in its spec; otherwise
+    # one is built from the task description and the response-key mapping.
     if show_instructions:
-        msg = spec.get("task", "Press the keys as instructed.")
-        mapping = spec.get("responses", {}).get("mapping", {})
-        keys_txt = "   ".join(f"{k}->{v}" for k, v in mapping.items())
-        visual.TextStim(win, height=0.045, color="white", wrapWidth=1.5,
-                        text=f"{msg}\n\n{keys_txt}\n\nPress SPACE to begin.").draw()
+        body = spec.get("instructions")
+        if not body:
+            msg = spec.get("task", "Press the keys as instructed.")
+            mapping = spec.get("responses", {}).get("mapping", {})
+            keys_txt = "    ".join(f"{k} = {v}" for k, v in mapping.items())
+            body = f"{msg}\n\n{keys_txt}"
+        visual.TextStim(win, height=0.04, color="white", wrapWidth=1.6,
+                        alignText="left", anchorHoriz="center",
+                        text=body.rstrip() + "\n\n\nPress SPACE to begin.").draw()
         win.flip()
         if event.waitKeys(keyList=["space", quit_key]) == [quit_key]:
             win.close(); core.quit()

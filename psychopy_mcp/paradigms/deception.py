@@ -33,6 +33,26 @@ SPEC = {
     "condition_balance": "equal; each question answered both truthfully and deceptively",
     "task": ("Answer each yes/no question. GREEN question = tell the TRUTH. "
              "RED question = LIE (give the wrong answer). yes = J, no = F."),
+    "instructions": (
+        "DECEPTION TASK\n"
+        "\n"
+        "You will see yes / no questions, one at a time.\n"
+        "The COLOUR of the question tells you how to answer:\n"
+        "\n"
+        "    GREEN question   ->   tell the TRUTH\n"
+        "    RED question     ->   LIE (give the WRONG answer)\n"
+        "\n"
+        "Respond with the keys:    J = yes      F = no\n"
+        "\n"
+        "Examples:\n"
+        "    GREEN  'Is the sky blue?'   ->  truth ->  press J (yes)\n"
+        "    RED    'Is the sky blue?'   ->  lie   ->  press F (no)\n"
+        "    RED    'Do cats bark?'      ->  lie   ->  press J (yes)\n"
+        "\n"
+        "First there is a '+' to fixate on, then the question appears.\n"
+        "Answer as quickly and accurately as you can.\n"
+        "(Press ESC at any time to quit.)"
+    ),
     "surface": {
         "units": "height", "background": "black",
         "stim_pos": [0.0, 0.0], "stim_height": 0.06,
