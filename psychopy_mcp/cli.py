@@ -22,12 +22,15 @@ def _claude_config_path() -> Path:
 
 
 def configure_claude() -> int:
+    from psychopy_mcp.paths import PROJECT_ROOT
     cfg_path = _claude_config_path()
     py = sys.executable                       # the interpreter running this CLI
+    # include PYTHONPATH so the server is importable from any working directory
+    # (the venv is created with uv and has no pip-installed package).
     entry = {
         "command": py,
         "args": ["-m", "psychopy_mcp.server"],
-        "env": {},
+        "env": {"PYTHONPATH": str(PROJECT_ROOT)},
     }
     cfg = {}
     if cfg_path.exists():
@@ -38,8 +41,8 @@ def configure_claude() -> int:
     cfg.setdefault("mcpServers", {})
     cfg["mcpServers"]["psychopy"] = entry
     cfg_path.write_text(json.dumps(cfg, indent=2), encoding="utf-8")
-    print(f"✓ configured Claude Code MCP server 'psychopy' -> {py} -m psychopy_mcp.server")
-    print(f"  ({cfg_path})")
+    print(f"[OK] configured Claude Code MCP server 'psychopy' -> {py} -m psychopy_mcp.server")
+    print(f"     ({cfg_path})")
     return 0
 
 
