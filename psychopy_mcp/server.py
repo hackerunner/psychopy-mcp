@@ -29,7 +29,7 @@ from typing import Any, Optional
 from mcp.server.fastmcp import FastMCP
 
 from psychopy_mcp.paths import (
-    CUSTOM_DIR, LAUNCHER, LIVE_SCRIPT, TEMPLATES, VENV_PY, WORKSPACE,
+    CUSTOM_DIR, LIVE_SCRIPT, TEMPLATES, VENV_PY, WORKSPACE,
 )
 
 WORKSPACE.mkdir(parents=True, exist_ok=True)
@@ -264,19 +264,6 @@ def create_custom_paradigm(
         return {"error": "invalid spec", "problems": errs}
     path = customlib.save(spec, paradigms.CUSTOM_DIR)
     return {"path": str(path), "key": path.stem, "items": len(items)}
-
-
-@mcp.tool()
-def launch_gui() -> dict:
-    """Open the desktop launcher GUI for picking/running/creating paradigms.
-
-    Starts the Tkinter launcher as a separate process: choose a paradigm, set
-    participant/options, Generate or Generate & Run, or build a custom paradigm.
-    """
-    if not LAUNCHER.exists():
-        return {"error": f"launcher not found: {LAUNCHER}"}
-    proc = subprocess.Popen([_py(), str(LAUNCHER)], cwd=str(HERE))
-    return {"started": True, "pid": proc.pid, "launcher": str(LAUNCHER)}
 
 
 @mcp.tool()

@@ -28,16 +28,15 @@ Claude Code / Codex
       ▼
   psychopy_mcp/server.py  ──FastMCP──┐
       │                              │ subprocess (psychopy venv)
-      │   paradigms/  (引擎+14范式)   ├── run_experiment   → 运行 *.py 实验
-      │   frontend/   (GUI 启动器)    ├── scaffold_paradigm → 生成文献校准实验
-      │   runner/     (常驻窗口)      └── validate / compile / live
+      │   paradigms/  (引擎+15范式)   ├── run_experiment   → 运行 *.py 实验
+      │   runner/     (常驻窗口)      ├── scaffold_paradigm → 生成文献校准实验
+      │   analysis/web (分析/网页)    └── validate / compile / live
       ▼
  .venv (Python 3.10 + PsychoPy 2026.1.3)
 ```
 
-- **psychopy_mcp/server.py** —— MCP 服务器（FastMCP），暴露全部 19 个工具。
-- **psychopy_mcp/paradigms/** —— 文献校准范式库：共享 `engine.py`（phase 引擎）+ 每范式一个模块（`SPEC` + `build_trials`）+ `custom.py`（自定义范式）。
-- **psychopy_mcp/frontend/launcher.py** —— Tkinter 桌面启动器：选范式 / 设参数 / 生成并运行 / 新建自定义范式。
+- **psychopy_mcp/server.py** —— MCP 服务器（FastMCP），暴露全部 21 个工具。
+- **psychopy_mcp/paradigms/** —— 文献校准范式库：共享 `engine.py`（phase 引擎）+ 每范式一个模块（`SPEC` + `build_trials`）+ `custom.py`（对话式自定义范式）。
 - **psychopy_mcp/runner/live_session.py** —— 常驻子进程，持有 PsychoPy `Window`，按行收发 JSON，实现"实时接管"。
 - **workspace/** —— 脚手架/运行/数据的默认工作目录（相对路径解析到这里）。
 
@@ -51,8 +50,7 @@ Claude Code / Codex
 | **范式** | `list_paradigms` | 列出内置的「文献校准」经典范式 |
 | **范式** | `get_paradigm` | 返回某范式的完整规范（设计/固定的字号位置/时序/引用）|
 | **范式** | `scaffold_paradigm` | 按文献规范生成可运行实验脚本（各条件字号/位置一致，杜绝 NL 自由发挥导致的偏差）|
-| **范式** | `create_custom_paradigm` | 定义并保存自定义范式（之后像内置范式一样用）|
-| **范式** | `launch_gui` | 打开桌面启动器（选范式/运行/新建自定义范式）|
+| **范式** | `create_custom_paradigm` | 对话式定义并保存自定义范式（之后像内置范式一样用）|
 | 创作 | `scaffold_experiment` | 从模板生成 coder/builder 起始文件 |
 | 创作 | `validate_script` | 静态检查：语法 + import 解析（不运行、不开窗）|
 | 执行 | `run_experiment` | 以子进程运行实验，捕获 stdout/stderr + 新增数据文件 |
@@ -81,7 +79,7 @@ python -m venv .venv
 .venv\Scripts\python -m psychopy_mcp.cli configure-claude
 ```
 
-项目自带 `.mcp.json`（用 `python -m psychopy_mcp.server` 启动），在本目录打开 Claude Code 即自动加载。Codex 用同样的 command/args 即可。CLI 还提供 `psychopy-mcp serve|gui|list|configure-claude`。
+项目自带 `.mcp.json`（用 `python -m psychopy_mcp.server` 启动），在本目录打开 Claude Code 即自动加载。Codex 用同样的 command/args 即可。CLI 还提供 `psychopy-mcp serve|list|configure-claude`。
 
 ## 典型工作流
 

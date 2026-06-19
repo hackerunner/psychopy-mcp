@@ -36,7 +36,6 @@ packages = [
     "psychopy_mcp",
     "psychopy_mcp.paradigms",
     "psychopy_mcp.runner",
-    "psychopy_mcp.frontend",
 ]
 
 [tool.setuptools.package-data]

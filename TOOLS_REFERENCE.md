@@ -1,6 +1,6 @@
 # Tools Reference
 
-22 MCP tools, grouped. Relative paths resolve under `workspace/`.
+21 MCP tools, grouped. Relative paths resolve under `workspace/`.
 
 ## Introspection
 | Tool | Args | Returns |
@@ -15,8 +15,7 @@
 | `list_paradigms` | – | all built-in + custom paradigms (key/name/summary) |
 | `get_paradigm` | `key` | full spec: design, fixed surface params, timing, refs |
 | `scaffold_paradigm` | `key, name, opts?` | generates a runnable experiment script |
-| `create_custom_paradigm` | `name, items, mapping, reps?, …` | saves a custom paradigm |
-| `launch_gui` | – | opens the desktop launcher |
+| `create_custom_paradigm` | `name, items, mapping, reps?, …` | saves a custom paradigm (just describe it to Claude) |
 
 Built-in keys: `stroop, flanker, simon, gonogo, posner, stopsignal, ant, nback,
 sternberg, visualsearch, taskswitch, lexdecision, mentalrotation, dotprobe`.

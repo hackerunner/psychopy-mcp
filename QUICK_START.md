@@ -27,16 +27,9 @@ The repo ships a `.mcp.json`, so launching Claude Code in this folder loads the
 
 > "列出所有范式" → `list_paradigms`
 > "用 stroop 范式生成一个实验并运行" → `scaffold_paradigm("stroop","exp1")` + `run_experiment`
-> "读一下刚才的数据" → `read_data`
+> "读一下刚才的数据，并算出效应" → `read_data` + `analyze_data`
 
-Or open the GUI launcher:
-
-> "打开实验启动器" → `launch_gui`
-or `.venv\Scripts\python -m psychopy_mcp.cli gui`
-
-## 4. Make your own paradigm
-
-In the launcher click **＋ 新建自定义范式**, or ask Claude:
+## 4. Make your own paradigm — just describe it to Claude
 
 > "创建一个自定义范式：呈现 HAPPY/SAD 两个词，按 f/j 反应"
 → `create_custom_paradigm(...)`
